@@ -5,15 +5,16 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class VersionCheck {
-	public static void check() {
+	public static String check() {
 		URL updateURL = null;
 		BufferedReader in = null;
 		String version = "";
 		try {
-			updateURL = new URL("https://raw.githubusercontent.com/jingshenSN2/SlabHelper/master/VERSION");
+			updateURL = new URL("https://raw.githubusercontent.com/jingshenSN2/SlabHelper/1.15.2/VERSION");
 			in = new BufferedReader(new InputStreamReader(updateURL.openStream()));
 			version = in.readLine();
 		} catch (Exception e) {
+			// fail to connect
 			SlabHelper.LOGGER.info("Fail to check update! Please check your network connection.");
 		} finally {
 			if (in != null) {
@@ -23,8 +24,12 @@ public class VersionCheck {
 				}
 			}
 		}
+		// need update
 		if (!version.equals(SlabHelper.VERSION)) {
-			SlabHelper.LOGGER.info("Update " + version + " found! Download the latest version at https://www.curseforge.com/minecraft/mc-mods/slab-helper");
+			String update = "Update " + version + " found! Download the latest version at https://www.curseforge.com/minecraft/mc-mods/slab-helper";
+			SlabHelper.LOGGER.info(update);
+			return update;
 		} 
+		return "";
 	}
 }
