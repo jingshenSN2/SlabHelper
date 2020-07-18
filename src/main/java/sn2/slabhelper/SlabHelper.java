@@ -8,24 +8,25 @@ import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sn2.slabhelper.callbacks.CallbackRegistry;
 import sn2.slabhelper.config.ConfigHandler;
+import sn2.slabhelper.config.SlabHelperConfig;
 import sn2.slabhelper.item.ItemRegistry;
 
 public class SlabHelper implements ModInitializer {
 	
 	public static final String MODID = "slabhelper";
-	public static final String VERSION = "1.2.1";
+	public static final String VERSION = "1.3.0";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-	public static Identifier HALFMINE = new Identifier(SlabHelper.MODID, "half");
-	public static Identifier HALFMINE_DROP = new Identifier(SlabHelper.MODID, "drop");
-	public static Identifier HALFMINE_REGEN = new Identifier(SlabHelper.MODID, "regen");
-	
+	public static Identifier HALFMINE = new Identifier(SlabHelper.MODID, "half");	
 	private static HashMap<UUID, Boolean> enableHalfMine = new HashMap<UUID, Boolean>();
-	
+		
 	@Override
 	public void onInitialize() {
 		new ConfigHandler(SlabHelperConfig.class, MODID);
@@ -49,6 +50,10 @@ public class SlabHelper implements ModInitializer {
 			enableHalfMine.replace(player.getUuid(), enable);
 		else
 			enableHalfMine.put(player.getUuid(), enable);
-		player.addChatMessage(new TranslatableText("message.player.halfmine", enable? "ON":"OFF"), true);
+		Text ON = new TranslatableText("message.player.halfmine.on").setStyle(
+				new Style().setColor(Formatting.GREEN));
+		Text OFF = new TranslatableText("message.player.halfmine.off").setStyle(
+				new Style().setColor(Formatting.RED));
+		player.addChatMessage(new TranslatableText("message.player.halfmine", enable? ON:OFF), true); // just no color?
 	}
 }

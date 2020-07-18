@@ -2,6 +2,7 @@ package sn2.slabhelper.item;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.SlabType;
@@ -10,28 +11,44 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.ToolMaterial;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import sn2.slabhelper.SlabHelperConfig;
+import sn2.slabhelper.config.SlabHelperConfig;
 
 public class ItemSlabHooker extends Item{
 
-	public ItemSlabHooker(Settings settings) {
-		super(settings);
+	private int effective_range = 0;
+	private boolean effect_other_slab = false;
+	
+	public ItemSlabHooker(ToolMaterial material, int range, boolean effect_other_slab) {
+		super(new Settings().maxCount(1).group(ItemGroup.TOOLS).maxDamage(material.getDurability()));
+		this.effective_range = range;
+		this.effect_other_slab = effect_other_slab;
 	}
 	
 	@Override
 	public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-	     tooltip.add(new TranslatableText("item.slabhelper.slab_hooker.tooltip"));
+		tooltip.add(new TranslatableText("item.slabhelper.slab_hooker.tooltip"));
+	     tooltip.add(new TranslatableText("item.slabhelper.slab_hooker.tooltip.range", effective_range * 2 + 1, 
+	    		 effective_range * 2 + 1).setStyle(new Style().setColor(Formatting.GREEN)));
+	     if (!this.effect_other_slab && this.effective_range != 0)
+	    	 tooltip.add(new TranslatableText("item.slabhelper.slab_hooker.tooltip.onlyeffectonsame").setStyle(
+	    			 new Style().setColor(Formatting.RED)));
 	}
 	
 	@Override
 	public ActionResult useOnBlock(ItemUsageContext context) {
+		// exceptions
 		World world = context.getWorld();
 		if (world.isClient)
 			return ActionResult.PASS;
@@ -40,21 +57,40 @@ public class ItemSlabHooker extends Item{
 			return ActionResult.PASS;
 		BlockPos pos = context.getBlockPos();
 		BlockState state = world.getBlockState(pos);
+		// deal with center slab block
 		if (!(state.getBlock() instanceof SlabBlock)) 
 			return ActionResult.PASS;
-		//System.out.println("slab!");
 		if (state.get(SlabBlock.TYPE) == SlabType.DOUBLE)
 			return ActionResult.PASS;
-		//System.out.println("half slab!");
-		if (state.get(SlabBlock.TYPE) == SlabType.TOP)
-			world.setBlockState(pos, state.with(SlabBlock.TYPE, SlabType.BOTTOM));
-		if (state.get(SlabBlock.TYPE) == SlabType.BOTTOM)
-			world.setBlockState(pos, state.with(SlabBlock.TYPE, SlabType.TOP));
+		SlabType baseType = state.get(SlabBlock.TYPE);
+		SlabType toType = baseType == SlabType.TOP? SlabType.BOTTOM : SlabType.TOP;
+		for (int i = -effective_range; i <= +effective_range; i++) {
+			for (int j = -effective_range; j <= +effective_range; j++) {
+				this.changeState(world, pos.add(i, 0, j), toType, player, state.getBlock());
+			}
+		}
+		// damage item
 	    player.addExhaustion(0.005F);
 		context.getStack().damage(1, (LivingEntity)player, ((e) -> {
 	         e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
 	      }));
-		//System.out.println(world.getBlockState(pos).get(SlabBlock.TYPE));
 		return ActionResult.PASS;
+	}
+	
+	private void changeState(World world, BlockPos pos, SlabType toType, PlayerEntity player, Block baseBlock) {
+		BlockState state = world.getBlockState(pos);
+		if (!this.effect_other_slab && !state.getBlock().equals(baseBlock))
+			return;
+		if (!(state.getBlock() instanceof SlabBlock)) 
+			return;
+		if (state.get(SlabBlock.TYPE) == SlabType.DOUBLE)
+			return;
+		// keep player safe
+		if (state.get(SlabBlock.TYPE) == SlabType.BOTTOM && toType == SlabType.TOP 
+				&& player.getBlockPos().equals(pos)) {
+			player.setBoundingBox(player.getBoundingBox().offset(new Vec3d(0, 0.5, 0)));
+			player.moveToBoundingBoxCenter();
+		}
+		world.setBlockState(pos, state.with(SlabBlock.TYPE, toType));
 	}
 }

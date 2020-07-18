@@ -5,9 +5,12 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "SlabBlockMixin";
-	"PlayerManagerMixin"
+	"PlayerManagerMixin";
+	"ServerPlayerInteractionManagerMixin"
   ],
   "client": [
+	"BlockRenderManagerMixin";
+	"ClientPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
