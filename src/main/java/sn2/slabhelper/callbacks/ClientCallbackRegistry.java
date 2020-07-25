@@ -14,12 +14,11 @@ public class ClientCallbackRegistry {
 	@Environment(EnvType.CLIENT)
 	public static void init() {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-		    if (SlabHelperKey.halfmine.wasPressed()) {
-		    	ClientSlabHelper.setHalfMine();
-		    	PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		    	ClientSidePacketRegistry.INSTANCE.sendToServer(SlabHelper.HALFMINE, passedData);
-		    }
+			if (SlabHelperKey.halfmine.wasPressed()) {
+				ClientSlabHelper.setHalfMine();
+				PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+				ClientSidePacketRegistry.INSTANCE.sendToServer(SlabHelper.HALFMINE, passedData);
+			}
 		});
 	}
 }
-

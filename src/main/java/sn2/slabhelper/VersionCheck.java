@@ -33,20 +33,23 @@ public class VersionCheck {
 		}
 		// need update
 		if (version != null && !version.equals(SlabHelper.VERSION)) {
-			String update = "Update " + version + " found! Download the latest version at https://www.curseforge.com/minecraft/mc-mods/slab-helper";
+			String update = "Update " + version
+					+ " found! Download the latest version at https://www.curseforge.com/minecraft/mc-mods/slab-helper";
 			SlabHelper.LOGGER.info(update);
 			return version;
-		} 
+		}
 		return null;
 	}
-	
+
 	public static void init() {
 		// Update check
 		PlayerLoginCallback.EVENT.register((connection, player) -> {
 			String update = VersionCheck.check();
 			if (update != null) {
-				Text text = new TranslatableText("message.player.update", update, 
-						new TranslatableText("message.player.update.here").setStyle(new Style().setUnderline(true).setItalic(true).setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/mc-mods/slab-helper"))));
+				Text text = new TranslatableText("message.player.update", update,
+						new TranslatableText("message.player.update.here").setStyle(new Style().setUnderline(true)
+								.setItalic(true).setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+										"https://www.curseforge.com/minecraft/mc-mods/slab-helper"))));
 				player.addChatMessage(text.setStyle(new Style().setColor(Formatting.GREEN)), false);
 			}
 		});
