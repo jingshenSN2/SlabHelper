@@ -28,26 +28,30 @@ import sn2.slabhelper.ClientSlabHelper;
 @Environment(EnvType.CLIENT)
 @Mixin(BlockRenderManager.class)
 public class BlockRenderManagerMixin {
-	
+
 	@Shadow
 	private BlockModels models;
 	@Shadow
 	private BlockModelRenderer blockModelRenderer;
 	@Shadow
 	private final Random random = new Random();
-	
+
 	@Inject(method = "tesselateDamage", at = @At("HEAD"), cancellable = true)
-	public void onDamage(BlockState state, BlockPos pos, Sprite sprite, BlockRenderView blockRenderView , CallbackInfo info) {
-		if (ClientSlabHelper.isHalfMine() && state.getBlock() instanceof SlabBlock && state.get(SlabBlock.TYPE) == SlabType.DOUBLE) {
+	public void onDamage(BlockState state, BlockPos pos, Sprite sprite, BlockRenderView blockRenderView,
+			CallbackInfo info) {
+		if (ClientSlabHelper.isHalfMine() && state.getBlock() instanceof SlabBlock
+				&& state.get(SlabBlock.TYPE) == SlabType.DOUBLE) {
 			SlabType type = ClientSlabHelper.getDamageRender(pos);
 			if (type != null)
 				state = state.with(SlabBlock.TYPE, type);
 			if (state.getRenderType() == BlockRenderType.MODEL) {
-		         BakedModel bakedModel = this.models.getModel(state);
-		         long l = state.getRenderingSeed(pos);
-		         BakedModel bakedModel2 = (new BasicBakedModel.Builder(state, bakedModel, sprite, this.random, l)).build();
-		         this.blockModelRenderer.tesselate(blockRenderView, bakedModel2, state, pos, Tessellator.getInstance().getBuffer(), true, this.random, l);
-		      }
+				BakedModel bakedModel = this.models.getModel(state);
+				long l = state.getRenderingSeed(pos);
+				BakedModel bakedModel2 = (new BasicBakedModel.Builder(state, bakedModel, sprite, this.random, l))
+						.build();
+				this.blockModelRenderer.tesselate(blockRenderView, bakedModel2, state, pos,
+						Tessellator.getInstance().getBuffer(), true, this.random, l);
+			}
 			info.cancel();
 		}
 	}
