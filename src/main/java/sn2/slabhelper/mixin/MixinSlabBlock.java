@@ -20,15 +20,10 @@ import sn2.slabhelper.config.SlabHelperConfig;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SlabBlock.class)
-public abstract class SlabBlockMixin extends Block {
-
-	public SlabBlockMixin(Settings settings) {
-		super(settings);
-		// TODO Auto-generated constructor stub
-	}
+public abstract class MixinSlabBlock {
 
 	@Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
-	public void renderShape(BlockState state, BlockView world, BlockPos pos, EntityContext context,
+	public void SLABHELPER$SHAPE(BlockState state, BlockView world, BlockPos pos, EntityContext context,
 			CallbackInfoReturnable<VoxelShape> info) {
 		if (SlabHelperConfig.renderAdditionalEdges && state.get(SlabBlock.TYPE) == SlabType.DOUBLE)
 			// A shape unioned by two half block
