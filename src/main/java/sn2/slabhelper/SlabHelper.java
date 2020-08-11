@@ -13,7 +13,7 @@ import sn2.slabhelper.item.ItemRegistry;
 public class SlabHelper implements ModInitializer {
 
 	public static final String MODID = "slabhelper";
-	public static final String VERSION = "1.3.2";
+	public static final String VERSION = "1.3.3";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
 	public static Identifier HALFMINE = new Identifier(SlabHelper.MODID, "half");
