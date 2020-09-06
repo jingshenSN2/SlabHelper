@@ -19,7 +19,7 @@ public class MathUtils {
 	}
 
 	public static SlabType getHitType(BlockPos pos, PlayerEntity player, BlockState state) {
-		HitResult result = player.rayTrace(6, 0, false);
+		HitResult result = player.raycast(6, 0, false);
 		Vec3d hit = result.getPos();
 		double hitY = hit.getY();
 		double relativeY = hitY - (int) hitY;
