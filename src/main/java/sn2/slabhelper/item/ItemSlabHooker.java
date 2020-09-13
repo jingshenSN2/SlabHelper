@@ -94,7 +94,7 @@ public class ItemSlabHooker extends Item {
 			world.setBlockState(pos, state.with(SlabBlock.TYPE, toType));
 			if (toType == SlabType.TOP) {
 				Box box = new Box(pos);
-				world.getEntities(null, box).forEach(e -> {
+				world.getOtherEntities(null, box).forEach(e -> {
 					e.setBoundingBox(e.getBoundingBox().offset(new Vec3d(0, 0.5, 0)));
 					e.moveToBoundingBoxCenter();
 				});

@@ -1,13 +1,11 @@
 package sn2.slabhelper.util;
 
-import java.util.Optional;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class MathUtils {
@@ -21,18 +19,14 @@ public class MathUtils {
 	}
 
 	public static SlabType getHitType(BlockPos pos, PlayerEntity player, BlockState state) {
-		Box box = new Box(pos);
-		Vec3d vec3d = player.getCameraPosVec(1);
-		Vec3d vec3d2 = player.getRotationVec(1);
-		Vec3d vec3d3 = vec3d.add(vec3d2.x * 10, vec3d2.y * 10, vec3d2.z * 10);
-		Optional<Vec3d> result = box.rayTrace(vec3d, vec3d3);
-		Vec3d hit = result.get();
+		HitResult result = player.raycast(6, 0, false);
+		Vec3d hit = result.getPos();
 		double hitY = hit.getY();
 		double relativeY = hitY - (int) hitY;
 		// hit at top or bottom
 		if (relativeY == 0) {
 			// hit at bottom
-			if (hitY >= player.getPos().y + (double) player.getStandingEyeHeight())
+			if (hitY >= player.getPos().y + (double) player.getEyeHeight(player.getPose()))
 				return SlabType.BOTTOM;
 			// hit at top
 			else
