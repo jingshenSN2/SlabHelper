@@ -84,7 +84,7 @@ public class ItemSlabHooker extends Item {
 
 	private boolean changeState(World world, BlockPos pos, SlabType toType, PlayerEntity player, Block baseBlock) {
 		BlockState state = world.getBlockState(pos);
-		if (!this.effect_other_slab && !state.getBlock().is(baseBlock))
+		if (!this.effect_other_slab && !state.isOf(baseBlock))
 			return false;
 		if (!(state.getBlock() instanceof SlabBlock))
 			return false;
