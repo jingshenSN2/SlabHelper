@@ -9,6 +9,7 @@ import net.minecraft.block.enums.SlabType;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -95,10 +96,8 @@ public class ItemSlabHooker extends Item {
 			if (toType == SlabType.TOP) {
 				Box box = new Box(pos);
 				world.getOtherEntities(null, box).forEach(e -> {
-					e.setBoundingBox(e.getBoundingBox().offset(new Vec3d(0, 0.5, 0)));
-					e.moveToBoundingBoxCenter();
+					e.setPosition(e.getX(), e.getY() + 0.6, e.getZ());
 				});
-				;
 			}
 			return true;
 		}

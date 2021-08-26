@@ -18,15 +18,12 @@ public class ItemRegistry {
 
 	public static void init() {
 		if (SlabHelperConfig.enableHooker) {
-			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "wooden_slab_hooker"),
-					WOODEN_SLAB_HOOKER);
+			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "wooden_slab_hooker"), WOODEN_SLAB_HOOKER);
 			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "stone_slab_hooker"), STONE_SLAB_HOOKER);
 			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "iron_slab_hooker"), IRON_SLAB_HOOKER);
 			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "golden_slab_hooker"), GOLD_SLAB_HOOKER);
-			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "diamond_slab_hooker"),
-					DIAMOND_SLAB_HOOKER);
-			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "netherite_slab_hooker"),
-					NETHERITE_SLAB_HOOKER);
+			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "diamond_slab_hooker"), DIAMOND_SLAB_HOOKER);
+			Registry.register(Registry.ITEM, new Identifier(SlabHelper.MODID, "netherite_slab_hooker"), NETHERITE_SLAB_HOOKER);
 		}
 	}
 }

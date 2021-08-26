@@ -4,7 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import sn2.slabhelper.HalfMinePlayerEntity;
 import sn2.slabhelper.SlabHelper;
@@ -18,7 +18,7 @@ public class ClientCallbackRegistry {
 			if (SlabHelperKey.halfmine.wasPressed()) {
 				((HalfMinePlayerEntity) client.player).setHalfMine();
 				PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-				ClientSidePacketRegistry.INSTANCE.sendToServer(SlabHelper.HALFMINE, passedData);
+				ClientPlayNetworking.send(SlabHelper.HALFMINE, passedData);
 			}
 		});
 

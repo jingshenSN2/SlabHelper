@@ -10,7 +10,7 @@ public class VersionCheck {
 		BufferedReader in = null;
 		String version = null;
 		try {
-			updateURL = new URL("https://raw.githubusercontent.com/jingshenSN2/SlabHelper/1.16/VERSION");
+			updateURL = new URL("https://raw.githubusercontent.com/jingshenSN2/SlabHelper/1.17/VERSION");
 			in = new BufferedReader(new InputStreamReader(updateURL.openStream()));
 			version = in.readLine();
 		} catch (Exception e) {
